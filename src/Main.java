@@ -20,13 +20,8 @@ public class Main {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.update(name.getBytes(), 0, name.length());
         byte[] result = md.digest();
-
-        StringBuilder sb = new StringBuilder("");
-        for(byte b: result){
-            sb.append(String.format("%02x", b & 0xff));
-        }
-
-        idhash = sb.toString();
+        
+        idhash = bytesToHex(result);
         System.out.println("Your hash address: " + idhash);
 
         group = InetAddress.getByName("228.5.6.7");
@@ -114,5 +109,15 @@ public class Main {
         };
 
         transmit.start();
+    }
+    
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for ( int j = 0; j < bytes.length; j++ ) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 }
