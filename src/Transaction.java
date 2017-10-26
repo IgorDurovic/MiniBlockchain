@@ -9,24 +9,26 @@ public class Transaction{
 
 	public String senderAddress;
 
-	transaction(int in, int a, String sa){
+	Transaction(int in, int a, String sa){
 		input = in;
 		id = in + 2;
 		amount = a;
 		senderAddress = sa;
 	}
 
-	public boolean verifyOwnership(String name){
-		MessageDigest md = MessageDigest.getInstance("SHA-256");
-        md.update(name.getBytes(), 0, name.length());
-        byte[] result = md.digest();
-
-        StringBuilder sb = new StringBuilder("");
-        for(byte b: result){
-            sb.append(String.format("%02x", b & 0xff));
-        }
-
-        return senderAddress.equals(sb.toString());
+	public boolean verifyOwnership(String name) {
+		try{
+			MessageDigest md = MessageDigest.getInstance("SHA-256");
+			md.update(name.getBytes(), 0, name.length());
+	        byte[] result = md.digest();
+	        
+	        return senderAddress.equals(Main.bytesToHex(result));
+		}
+		catch(NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 
 	public boolean verifyInput(){

@@ -11,7 +11,7 @@ public class Block{
 	//transaction container as merkel tree (heap)
 	public String[] merkeltree = new String[15];
 
-	block(int i, int hp){
+	Block(int i, String hp){
 		id = i;
 		hashprev = hp;
 
@@ -82,20 +82,20 @@ public class Block{
 			        nonce++;
 				}
 			}
-		}
+		};
 
 		work.start();
 	}
 
 	//top down recursive construction of merkel tree
-	public static String[] buildMerkelTree(Stack<transaction> txs){
+	public static String[] buildMerkelTree(Stack<Transaction> txs){
 		String[] tree = new String[15];
 		buildMerkelRoot(txs, tree, 0);
 
 		return tree;
 	}
 
-	public static String buildMerkelRoot(Stack<transaction> txs, String[] tree, int index) throws NoSuchAlgorithmException{
+	public static String buildMerkelRoot(Stack<Transaction> txs, String[] tree, int index) throws NoSuchAlgorithmException{
 		if(index > 6){
 			return txs.pop().toString();
 		}

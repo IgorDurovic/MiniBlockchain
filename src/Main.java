@@ -41,10 +41,10 @@ public class Main {
             public void run(){
                 while(true){
                     try{
-                        DatagramPacket msg = new DatagramPacket(new bytes[1000], 1000);
+                        DatagramPacket msg = new DatagramPacket(new byte[1000], 1000);
                         s.receive(msg);
                         
-                        String command = bytesToHex(msg.getDat());
+                        String command = bytesToHex(msg.getData());
 
                         /*switch(command.charAt(0)){
                             case '1':
@@ -107,7 +107,9 @@ public class Main {
     }
     
     public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
+    	char[] hexArray = "0123456789ABCDEF".toCharArray();
+    	char[] hexChars = new char[bytes.length * 2];
+        
         for ( int j = 0; j < bytes.length; j++ ) {
             int v = bytes[j] & 0xFF;
             hexChars[j * 2] = hexArray[v >>> 4];
