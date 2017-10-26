@@ -41,8 +41,7 @@ public class Main {
             public void run(){
                 while(true){
                     try{
-                        byte[] buffer = new byte[1000];
-                        DatagramPacket msg = new DatagramPacket(buffer, buffer.length);
+                        DatagramPacket msg = new DatagramPacket(new bytes[1000], 1000);
                         s.receive(msg);
                         
                         String command = bytesToHex(msg.getDat());
