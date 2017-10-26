@@ -44,12 +44,8 @@ public class Main {
                         byte[] buffer = new byte[1000];
                         DatagramPacket msg = new DatagramPacket(buffer, buffer.length);
                         s.receive(msg);
-
-                        StringBuilder sb = new StringBuilder("");
-                        for(byte b: msg.getData()){
-                            sb.append(String.format("%02x", b & 0xff));
-                        }
-                        String command = sb.toString();
+                        
+                        String command = bytesToHex(msg.getDat());
 
                         /*switch(command.charAt(0)){
                             case '1':
