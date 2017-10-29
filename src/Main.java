@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.sql.*;
 import java.net.*;
@@ -12,15 +11,40 @@ public class Main {
     public static MulticastSocket s;
     public static InetAddress group;
 
-    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
-        Scanner scn = new Scanner(System.in);
+    public static void main(String[] args) {
+    	init();
+    }
+    
+    public static void init() {
+    	try {
+    		File userInfo = new File("user.info");
+    		
+    		if(!userInfo.exists()) {
+    			userInfo.createNewFile();
+    			createUser();
+    		}
+    		
+    		setupDB();
+    		
+    		group = InetAddress.getByName("228.5.6.7");
+            s = new MulticastSocket(60010);
+            s.joinGroup(group);
+            DatagramPacket localhash = new DatagramPacket(("3 " + idhash).getBytes(), idhash.length() + 2, group, 60010);
+            s.send(localhash);
+    		
+    		//messaging communication
+            receiver();
+            transmitter();
+    	}
+    	catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    public static void createUser() throws NoSuchAlgorithmException, IOException {
+    	Scanner scn = new Scanner(System.in);
         System.out.println("Choose a username: ");
         name = scn.next();
-        
-        setupDB();
-        
-        //todo:
-        //syncBlockchain();
 
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.update(name.getBytes(), 0, name.length());
@@ -28,16 +52,6 @@ public class Main {
         
         idhash = bytesToHex(result);
         System.out.println("Your hash address: " + idhash);
-
-        group = InetAddress.getByName("228.5.6.7");
-        s = new MulticastSocket(60010);
-        s.joinGroup(group);
-        DatagramPacket localhash = new DatagramPacket(("3 " + idhash).getBytes(), idhash.length() + 2, group, 60010);
-        s.send(localhash);
-
-        //messaging communication
-        receiver();
-        transmitter();
     }
 
     public static void receiver(){
