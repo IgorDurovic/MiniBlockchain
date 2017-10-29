@@ -1,6 +1,6 @@
 
 import java.io.*;
-import java.math.BigInteger;
+import java.sql.*;
 import java.net.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +16,11 @@ public class Main {
         Scanner scn = new Scanner(System.in);
         System.out.println("Choose a username: ");
         name = scn.next();
+        
+        setupDB();
+        
+        //todo:
+        //syncBlockchain();
 
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.update(name.getBytes(), 0, name.length());
@@ -104,6 +109,22 @@ public class Main {
         };
 
         transmit.start();
+    }
+    
+    public static void setupDB() {
+    	try(
+    			Connection conn = DriverManager.getConnection(
+    					"jdbc:mysql://localhost/", "myuser", "xxxx");
+    			
+    			Statement stmt = conn.createStatement();
+    			){
+    		
+    		String query = "create database if not exists blockchain;";
+    		stmt.executeQuery(query);	
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    	}
     }
     
     public static String bytesToHex(byte[] bytes) {
