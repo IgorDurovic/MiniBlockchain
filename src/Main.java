@@ -150,7 +150,7 @@ public class Main {
 	}
 
 	public static void setupDB() {
-		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "i018365927439");
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "password");
 
 				Statement stmt = conn.createStatement();) {
 
