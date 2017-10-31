@@ -48,6 +48,8 @@ public class Main {
 				}
 			}
 			
+			br.close();
+			
 			group = InetAddress.getByName("228.5.6.7");
 			s = new MulticastSocket(60010);
 			s.joinGroup(group);
@@ -148,12 +150,21 @@ public class Main {
 	}
 
 	public static void setupDB() {
-		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/", "myuser", "xxxx");
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/", "root", "i018365927439");
 
 				Statement stmt = conn.createStatement();) {
 
 			String query = "create database if not exists blockchain;";
-			stmt.executeQuery(query);
+			stmt.execute(query);
+			
+			query = "use blockchain;";
+			stmt.execute(query);
+			
+			query = "create table if not exists peers (id int, hash varchar(200), name varchar(50), balance int);";
+			stmt.execute(query);
+			
+			query = "insert into peers values (1 , '" +  idhash + "', '" + name + "', 0);";
+			stmt.execute(query);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
